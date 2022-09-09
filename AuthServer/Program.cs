@@ -1,8 +1,8 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using OLHBackend.Repositories;
-using OLHBackend.Services;
+using AuthServer.Repositories;
+using AuthServer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

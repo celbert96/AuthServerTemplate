@@ -1,4 +1,4 @@
-namespace OLHBackend.Models
+namespace AuthServer.Models
 {
     public class WeatherForecast
     {

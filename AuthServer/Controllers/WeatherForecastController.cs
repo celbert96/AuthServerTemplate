@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OLHBackend.Models;
+using AuthServer.Models;
 
-namespace OLHBackend.Controllers
+namespace AuthServer.Controllers
 {
     [ApiController]
     [Route("[controller]")]

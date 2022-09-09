@@ -1,6 +1,6 @@
-﻿using OLHBackend.Models;
+﻿using AuthServer.Models;
 
-namespace OLHBackend.Services;
+namespace AuthServer.Services;
 
 public interface ITokenService
 {

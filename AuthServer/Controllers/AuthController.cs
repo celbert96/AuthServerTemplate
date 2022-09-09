@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using OLHBackend.Models;
-using OLHBackend.Repositories;
-using OLHBackend.Services;
+﻿using System.Net;
+using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
+using AuthServer.Models;
+using AuthServer.Repositories;
+using AuthServer.Services;
 
-namespace OLHBackend.Controllers;
+namespace AuthServer.Controllers;
 
 [ApiController]
 [Route("[controller]")]
@@ -23,11 +25,15 @@ public class AuthController : ControllerBase
     }
     
     [HttpPost(Name = "Login")]
-    public string Login(String username, String password)
+    public LoginResponse Login(LoginRequest loginRequest)
     {
+        var username = loginRequest.Username;
+        var password = loginRequest.Password;
         if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
         {
-            return "Error - null or empty";
+            var responseMsg = new HttpResponseMessage(HttpStatusCode.Unauthorized)
+                { ReasonPhrase = "Invalid credentials" };
+            throw new HttpResponseException(responseMsg);
         }
 
         var validUser = GetUser(username, password);
@@ -37,11 +43,11 @@ public class AuthController : ControllerBase
             var generatedToken = _tokenService.BuildToken(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), validUser);
             if (generatedToken != null)
             {
-                return generatedToken;
+                return new LoginResponse(generatedToken, new UserDTO(validUser));
             }
         }
 
-        return "Failure";
+        throw new HttpResponseException(HttpStatusCode.Unauthorized);
     }
     
     private User GetUser(String username, String password)

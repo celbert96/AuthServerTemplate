@@ -1,6 +1,6 @@
-﻿using OLHBackend.Models;
+﻿using AuthServer.Models;
 
-namespace OLHBackend.Repositories;
+namespace AuthServer.Repositories;
 
 public class UserRepository : IUserRepository
 {

@@ -2,9 +2,9 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using OLHBackend.Models;
+using AuthServer.Models;
 
-namespace OLHBackend.Services;
+namespace AuthServer.Services;
 
 public class TokenService : ITokenService
 {
