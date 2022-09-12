@@ -47,6 +47,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// CORS settings
+app.UseCors(corsBuilder => {
+    corsBuilder.AllowAnyOrigin();
+    corsBuilder.AllowAnyMethod();
+    corsBuilder.AllowAnyHeader();
+});
+
 app.UseHttpLogging();
 
 app.UseHttpsRedirection();
