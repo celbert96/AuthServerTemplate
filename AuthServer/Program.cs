@@ -13,6 +13,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+/* Uncomment below to customize logging (un-redact certain log messages) */
+
+// builder.Services.AddHttpLogging(logging =>
+// {
+//     logging.RequestHeaders.Add("Authorization");
+//     logging.ResponseHeaders.Add("Authorization");
+// });
+
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 
@@ -38,6 +46,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseHttpLogging();
 
 app.UseHttpsRedirection();
 

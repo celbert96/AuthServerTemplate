@@ -43,6 +43,7 @@ public class AuthController : ControllerBase
             var generatedToken = _tokenService.BuildToken(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), validUser);
             if (generatedToken != null)
             {
+                Response.Headers.Add("Authorization", "Bearer " + generatedToken);
                 return new LoginResponse(generatedToken, new UserDTO(validUser));
             }
         }
