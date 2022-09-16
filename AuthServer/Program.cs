@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using AuthServer.Repositories;
 using AuthServer.Services;
+using Microsoft.AspNetCore.HttpLogging;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -17,8 +17,11 @@ builder.Services.AddSwaggerGen();
 
 // builder.Services.AddHttpLogging(logging =>
 // {
+//     logging.LoggingFields = HttpLoggingFields.All;
 //     logging.RequestHeaders.Add("Authorization");
 //     logging.ResponseHeaders.Add("Authorization");
+//     
+//     logging.MediaTypeOptions.AddText("application/javascript");
 // });
 
 builder.Services.AddTransient<IUserRepository, UserRepository>();
@@ -47,12 +50,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// CORS settings
-app.UseCors(corsBuilder => {
-    corsBuilder.AllowAnyOrigin();
-    corsBuilder.AllowAnyMethod();
-    corsBuilder.AllowAnyHeader();
-});
+ // CORS settings
+ app.UseCors(corsBuilder =>
+ {
+     corsBuilder.WithOrigins("http://localhost:3000", "https://localhost:8080", "http://localhost:8080");
+     corsBuilder.AllowAnyMethod();
+     corsBuilder.AllowAnyHeader();
+     corsBuilder.AllowCredentials();
+ });
+
+app.UseCors();
 
 app.UseHttpLogging();
 

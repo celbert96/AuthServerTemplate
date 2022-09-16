@@ -25,15 +25,13 @@ public class AuthController : ControllerBase
     }
     
     [HttpPost(Name = "Login")]
-    public LoginResponse Login(LoginRequest loginRequest)
+    public ActionResult<LoginResponse> Login(LoginRequest loginRequest)
     {
         var username = loginRequest.Username;
         var password = loginRequest.Password;
         if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
         {
-            var responseMsg = new HttpResponseMessage(HttpStatusCode.Unauthorized)
-                { ReasonPhrase = "Invalid credentials" };
-            throw new HttpResponseException(responseMsg);
+            return Unauthorized("Invalid credentials");
         }
 
         var validUser = GetUser(username, password);
@@ -48,7 +46,7 @@ public class AuthController : ControllerBase
             }
         }
 
-        throw new HttpResponseException(HttpStatusCode.Unauthorized);
+        return Unauthorized("Invalid credentials");
     }
     
     private User GetUser(String username, String password)
