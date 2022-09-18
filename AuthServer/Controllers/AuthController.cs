@@ -24,7 +24,8 @@ public class AuthController : ControllerBase
         _logger = logger;
     }
     
-    [HttpPost(Name = "Login")]
+    [HttpPost]
+    [Route("Login")]
     public ActionResult<LoginResponse> Login(LoginRequest loginRequest)
     {
         var username = loginRequest.Username;
