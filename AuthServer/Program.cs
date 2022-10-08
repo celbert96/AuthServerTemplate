@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using AuthServer.Repositories;
 using AuthServer.Services;
+using AuthServer.Utils;
 using Microsoft.AspNetCore.HttpLogging;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,12 +25,14 @@ builder.Services.AddSwaggerGen();
 //     logging.MediaTypeOptions.AddText("application/javascript");
 // });
 
+var connString = Environment.GetEnvironmentVariable("OLH_BACKEND_CONN_STRING") ?? "";
+builder.Services.AddSingleton<IDatabaseUtil, MySqlDatabaseUtil>(_ => new MySqlDatabaseUtil(connString));
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
-    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
         ValidateAudience = true,

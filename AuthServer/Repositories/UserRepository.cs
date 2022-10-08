@@ -1,18 +1,22 @@
 ﻿using AuthServer.Models;
+using AuthServer.Utils;
 
 namespace AuthServer.Repositories;
 
 public class UserRepository : IUserRepository
 {
-    private readonly List<User> _users = new List<User>();
+    private readonly List<User?> _users = new List<User?>();
+    private readonly IDatabaseUtil _databaseUtil;
 
-    private UserRoles[] _defaultRoles = new[]
+    private List<UserRoles> _defaultRoles = new()
     {
         UserRoles.User
     };
     
-    public UserRepository()
+    public UserRepository(IDatabaseUtil databaseUtil)
     {
+        _databaseUtil = databaseUtil;
+        
         _users.Add(new User
         {
             Username = "user",
@@ -57,8 +61,17 @@ public class UserRepository : IUserRepository
         });
     }
     
-    public User GetUser(string username, string password)
+    public User? GetUser(string username, string password)
     {
-        return _users.FirstOrDefault(x => x.Username.ToLower() == username && x.Password == password);
+        var bindVars = new Dictionary<string, object>
+        {
+            {"username", username},
+            {"password", password}
+        };
+        
+        var query = "SELECT U.ID, U.USERNAME, U.CREATED_DATE, R.ROLE_ID FROM USERS U LEFT JOIN USER_ROLES R ON U.ID = R.USER_ID WHERE U.USERNAME = @username AND U.PASSWORD = @password;";
+        var res = _databaseUtil.PerformQuery(query, bindVars);
+
+        return res.Count == 0 ? null : User.CreateFromDatabaseQueryResult(res);
     }
 }

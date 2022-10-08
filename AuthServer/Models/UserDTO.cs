@@ -11,7 +11,7 @@ public class UserDTO
     public DateTime CreatedDate { get; set; }
     
     [Required]
-    public UserRoles[] Roles { get; set; }
+    public List<UserRoles> Roles { get; set; }
 
     public UserDTO(User user)
     {

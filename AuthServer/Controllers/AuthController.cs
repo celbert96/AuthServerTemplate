@@ -39,18 +39,15 @@ public class AuthController : ControllerBase
 
         if (validUser != null)
         {
-            var generatedToken = _tokenService.BuildToken(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), validUser);
-            if (generatedToken != null)
-            {
-                Response.Headers.Add("Authorization", "Bearer " + generatedToken);
-                return new LoginResponse(generatedToken, new UserDTO(validUser));
-            }
+            var generatedToken = _tokenService.BuildToken(_config["Jwt:Key"], _config["Jwt:Issuer"], validUser);
+            Response.Headers.Add("Authorization", "Bearer " + generatedToken);
+            return new LoginResponse(generatedToken, new UserDTO(validUser));
         }
 
         return Unauthorized("Invalid credentials");
     }
     
-    private User GetUser(String username, String password)
+    private User? GetUser(String username, String password)
     {
         // Write your code here to authenticate the user     
         return _userRepository.GetUser(username, password);
