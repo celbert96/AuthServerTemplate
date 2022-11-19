@@ -69,7 +69,9 @@ public class UserRepository : IUserRepository
             {"password", password}
         };
         
-        var query = "SELECT U.ID, U.USERNAME, U.CREATED_DATE, R.ROLE_ID FROM USERS U LEFT JOIN USER_ROLES R ON U.ID = R.USER_ID WHERE U.USERNAME = @username AND U.PASSWORD = @password;";
+        var query = "SELECT U.ID, U.USERNAME, U.CREATED_DATE, R.ROLE_ID FROM USERS U " +
+                    "LEFT JOIN USER_ROLES R ON U.ID = R.USER_ID " +
+                    "WHERE U.USERNAME = @username AND U.PASSWORD = @password;";
         var res = _databaseUtil.PerformQuery(query, bindVars);
 
         return res.Count == 0 ? null : User.CreateFromDatabaseQueryResult(res);

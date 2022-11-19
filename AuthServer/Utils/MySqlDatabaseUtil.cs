@@ -9,7 +9,7 @@ public class MySqlDatabaseUtil : IDatabaseUtil
 
     public MySqlDatabaseUtil(string connectionString)
     {
-        this._connectionString = connectionString;
+        _connectionString = connectionString;
         Console.WriteLine("CONN_STR" + connectionString);
     }
     
